@@ -1,6 +1,6 @@
 {
   "name": "bdd-delivery",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "BDD/SAFe delivery workflow for Claude Code. Shapes work into tickets whose acceptance criteria are Gherkin scenarios, then scaffolds tests from those scenarios as the first half of a stacked PR pair. Tracker-agnostic: Jira and GitHub Issues adapters ship separately from the rules, and site specifics (tracker coordinates, labels, test framework) come from a config file in the consuming repo.",
   "author": {
     "name": "Chrison Simtian",

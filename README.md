@@ -32,6 +32,10 @@ Three ideas in here earn their keep:
 
 Full conventions: [`plugins/bdd-delivery/skills/ticket/conventions.md`](plugins/bdd-delivery/skills/ticket/conventions.md).
 
+#### Versioning
+
+**Bump `version` in both `.claude-plugin/marketplace.json` and `plugins/bdd-delivery/.claude-plugin/plugin.json` on every content change.** There is no CI stamping it. Claude Code's `autoUpdate` compares versions, not content — so editing a skill without bumping leaves every installed copy silently stale, and `/plugin` cheerfully reports "already at the latest version" because by its own measure it is.
+
 #### Status
 
 Early. Exercised against one Jira site and a .NET/NUnit codebase; the GitHub adapter and the non-.NET test frameworks are written but lightly used. Expect the first run in a new environment to surface assumptions.

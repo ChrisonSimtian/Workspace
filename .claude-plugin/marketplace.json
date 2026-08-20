@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Generic Claude Code plugins: BDD/SAFe ticket shaping, Gherkin acceptance criteria, and test scaffolding from those criteria. Tracker-agnostic and test-framework-agnostic — site specifics come from a config file in the consuming repo.",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "plugins": [
     {
