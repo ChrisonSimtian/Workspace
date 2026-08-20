@@ -1,0 +1,96 @@
+name: Stamp plugin versions
+
+# Claude Code's plugin autoUpdate compares VERSIONS, not content. Edit a skill
+# without bumping and every installed copy stays stale while `/plugin` truthfully
+# reports "already at the latest version" — by its own measure, it is.
+#
+# So: any push to main that touches plugin content bumps the patch version of the
+# affected plugin(s) and the marketplace manifest, then commits the stamp back.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'plugins/**'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stamp-plugin-versions
+  cancel-in-progress: false
+
+jobs:
+  stamp:
+    # The stamp commit itself touches plugins/**, so without this guard it
+    # would retrigger the workflow forever.
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Find plugins with changed content
+        id: changed
+        run: |
+          set -euo pipefail
+          # Ignore the manifests themselves — a version-only edit is not a content change.
+          mapfile -t plugins < <(
+            git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" -- 'plugins/**' \
+              | grep -v '/\.claude-plugin/plugin\.json$' \
+              | awk -F/ 'NF>1 {print $2}' \
+              | sort -u
+          )
+          if [ ${#plugins[@]} -eq 0 ]; then
+            echo "No plugin content changed — nothing to stamp."
+            echo "list=" >> "$GITHUB_OUTPUT"
+          else
+            printf 'Changed plugins: %s\n' "${plugins[*]}"
+            echo "list=${plugins[*]}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Bump patch versions
+        if: steps.changed.outputs.list != ''
+        run: |
+          set -euo pipefail
+
+          bump() {   # $1 = file, $2 = jq path to the version string
+            local file="$1" path="$2" current next
+            current=$(jq -r "$path" "$file")
+            if [ "$current" = "null" ]; then
+              echo "::error::$file has no version at $path"
+              exit 1
+            fi
+            next=$(awk -F. '{ printf "%d.%d.%d", $1, $2, $3 + 1 }' <<< "$current")
+            jq --arg v "$next" "$path = \$v" "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+            echo "  $file: $current -> $next"
+          }
+
+          for p in ${{ steps.changed.outputs.list }}; do
+            manifest="plugins/$p/.claude-plugin/plugin.json"
+            if [ -f "$manifest" ]; then
+              bump "$manifest" '.version'
+            else
+              echo "::warning::no manifest at $manifest, skipping"
+            fi
+          done
+
+          # The catalogue changed too, so the marketplace manifest moves with it.
+          # Without this the marketplace clone can look unchanged to a consumer.
+          bump '.claude-plugin/marketplace.json' '.metadata.version'
+
+      - name: Commit the stamp
+        if: steps.changed.outputs.list != ''
+        run: |
+          set -euo pipefail
+          if git diff --quiet; then
+            echo "Versions already current — nothing to commit."
+            exit 0
+          fi
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .claude-plugin/marketplace.json 'plugins/*/.claude-plugin/plugin.json'
+          git commit -m "chore: stamp plugin versions for ${{ steps.changed.outputs.list }} [skip ci]"
+          git push
