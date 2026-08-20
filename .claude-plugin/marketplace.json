@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Generic Claude Code plugins: BDD/SAFe ticket shaping, Gherkin acceptance criteria, and test scaffolding from those criteria. Tracker-agnostic and test-framework-agnostic — site specifics come from a config file in the consuming repo.",
-    "version": "0.2.0"
+    "version": "0.2.1"
   },
   "plugins": [
     {
@@ -14,7 +14,15 @@
       "source": "./plugins/bdd-delivery",
       "description": "Write tickets in SAFe/BDD shape with Gherkin acceptance criteria, then turn those scenarios into tests. Ships Jira and GitHub Issues tracker adapters; the ticket rules themselves know nothing about either.",
       "category": "workflow",
-      "tags": ["bdd", "safe", "gherkin", "tdd", "tickets", "jira", "github-issues"]
+      "tags": [
+        "bdd",
+        "safe",
+        "gherkin",
+        "tdd",
+        "tickets",
+        "jira",
+        "github-issues"
+      ]
     }
   ]
 }
