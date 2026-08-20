@@ -75,13 +75,13 @@ Feature: <the capability being guaranteed>
 
 ## Refinement            ← NOT pushed
 
-**Three Amigos**
+**Three Amigos** — three seats, no more, roles not names
 
-| Seat | Who | Seen it | Question for them |
-|---|---|---|---|
-| Business | <name or "n/a — enabler, pain owned by support"> | no | <the one question> |
-| Development | <name> | yes | — |
-| Test | <name> | no | <the one question> |
+| Seat | Covered | Question for the seat |
+|---|---|---|
+| Business | no | <the one question> |
+| Development | yes | — |
+| Test | no | <the one question> |
 
 **Definition of Ready**
 

@@ -168,7 +168,13 @@ BDD is collaborative by definition. Before a ticket is Ready, three perspectives
 | **Development** | the engineer | same |
 | **Test** | QA | same |
 
-Record in the draft's `## Refinement` block: which seats have actually seen it, and the single question to put to each empty seat. Claude counts as **none** of the three.
+Record in the draft's `## Refinement` block: which seats have been covered, and the single question to put to each empty seat. Claude counts as **none** of the three.
+
+**There are exactly three seats, and they hold roles, not names.**
+
+- **Don't add a fourth.** The Three Amigos is three *perspectives*, not a stakeholder list. A standards owner, an architect, a security reviewer — all legitimate reviewers, none of them a fourth amigo. Adding a row for them is a category error that quietly turns the check into a sign-off queue.
+- **Don't write people's names in the seats.** Names go stale the moment someone changes role, and they turn a required perspective into one person's opinion — which is exactly what makes the seat skippable when that person is on leave. Record the seat and whether it's covered.
+- One person can hold two seats. That's normal on a small team, and it's still worth recording as two, because the two questions are different.
 
 ---
 
