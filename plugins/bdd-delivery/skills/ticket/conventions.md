@@ -187,7 +187,7 @@ Check the draft against this and record the result. Failing is fine; hiding the 
 - **I**ndependent — can ship without another unmerged story? If not, name the dependency explicitly.
 - **N**egotiable — describes the *what*, leaves room on the *how*. A ticket that prescribes the implementation line by line has skipped refinement.
 - **V**aluable — Value (business) or Why now (enabler) stands up to "so what?"
-- **E**stimable — could the team size it today? If a fact is missing, that's an Open question, and possibly a spike.
+- **E**stimable — could the team size it today? If a fact is missing, that's an Open question, and possibly a spike. **Sizing itself is not this workflow's job** — if the site has an estimation standard, the `overlay` should name it, and this check means only "is there enough here to estimate against it", not "here is a number".
 - **S**mall — one PR's worth. 3–8 scenarios is the proxy.
 - **T**estable — every scenario is falsifiable.
 
