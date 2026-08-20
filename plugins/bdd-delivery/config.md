@@ -33,6 +33,13 @@ Nothing here is required. Every key has a fallback, and a repo with no config fi
     "conventionsDoc": ".claude/docs/test-conventions.md"
   },
 
+  "pr": {
+    "template": null,
+    "labels": ["needs-review"],
+    "preflight": ["./build.ps1 VersionBump --dry-run"],
+    "base": "main"
+  },
+
   "jira": {
     "cloudId": "your-site.atlassian.net",
     "projectKey": "ABC",
@@ -66,6 +73,10 @@ Nothing here is required. Every key has a fallback, and a repo with no config fi
 | `tests.glob` | which paths count as test files for the PR 2 check | inferred from framework |
 | `tests.projectPattern` | how to find the test project for a given production project | discovered by search |
 | `tests.conventionsDoc` | site test-style doc — base class, builders, gotchas | none |
+| `pr.template` | path to a PR body template. When set it wins over inferring the shape from recent merged PRs | `null` — infer |
+| `pr.labels` | labels applied to every PR raised through the workflow | none |
+| `pr.preflight` | commands that must pass before raising — a version bump, a changelog check, a client regen | none |
+| `pr.base` | default base branch for the diff and the PR | the repo default branch |
 | `jira.acceptanceCriteriaField` | custom field id, or `null` when the project has none and Gherkin goes in the description | `null` |
 | `jira.serviceDeskProjects` | projects where a public comment reaches a customer. **Never write to these.** | none |
 | `github.useMilestoneAsEpic` | model the Feature level as a milestone rather than a tracking issue | `false` |

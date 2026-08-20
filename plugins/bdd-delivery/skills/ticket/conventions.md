@@ -249,9 +249,18 @@ If the house pattern uses "should" in test names while rule 6 bans it in Gherkin
 Stated that precisely because it's mechanically checkable. With `tests.skipMarker` = `Ignore` and `tests.glob` = `**/*Test*.cs`:
 
 ```powershell
-git diff <pr1-base>..HEAD -- '**/*Test*.cs' | Select-String '^[+-]' | Where-Object { $_ -notmatch '^\-\s*\[Ignore' }
+git diff "$base...HEAD" -- '**/*Test*.cs' |
+  Select-String '^[+-]' |
+  Where-Object { $_ -notmatch '^(\+\+\+|---)' -and $_ -notmatch '^-\s*\[Ignore' }
 ```
 
-Empty output means PR 2 is clean.
+```bash
+git diff "$BASE...HEAD" -- '**/*Test*.cs' \
+  | grep -E '^[+-]' | grep -Ev '^(\+\+\+|---)' | grep -Ev '^-[[:space:]]*\[Ignore'
+```
+
+Empty output means PR 2 is clean. **Both filters are needed** — dropping the `+++ b/…` / `--- a/…` file headers is not cosmetic, because without it the check reports a violation on every PR that touches a test file at all, including clean ones. The `...` three-dot form diffs against the merge base, which is what a PR actually shows.
+
+The `pr-description` skill runs this for you and reports the result in the PR body.
 
 **On executable Gherkin.** Cucumber, SpecFlow/Reqnroll and friends bind `.feature` files directly to step definitions. That is a real option and this workflow deliberately does not assume it: Gherkin stays in the ticket, your existing test framework stays in the repo, and the scenario→test-name mapping is the link. Adopting a binding framework is a separate, deliberate decision — not a side effect of writing acceptance criteria well.

@@ -19,6 +19,7 @@ A BDD/SAFe delivery workflow: write tickets whose acceptance criteria are Gherki
 |---|---|
 | `ticket` | Shapes work into a Story / Enabler / Bug, or an Epic + Story breakdown. Writes a reviewable markdown draft; pushes only on approval. |
 | `tests-from-ticket` | Reads a ticket's Gherkin, classifies each scenario by what can actually reach it, scaffolds the tests it can honestly write. |
+| `pr-description` | Drafts the PR body from the diff and the ticket, classifies it as the test or implementation half of a stacked pair, and mechanically checks that an implementation PR only removes skip markers from test files. |
 | `tracker-jira` | Jira mechanics — dedup search, hierarchy mapping, parent wiring, key stamping. |
 | `tracker-github` | GitHub Issues mechanics — milestones, sub-issues, labels-as-types. |
 
